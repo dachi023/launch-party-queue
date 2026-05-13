@@ -1,19 +1,16 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "launch-party-queue",
-  "compatibility_date": "2025-04-04",
-  "main": "./workers/app.ts",
-  "observability": {
-    "enabled": true
-  },
-  // database_id は意図的に未設定。
-  // - 本番 (Cloudflare):  `wrangler deploy` の自動プロビジョニングで作成される
-  // - ローカル:           `wrangler d1 migrations apply --local` 等は database_name で解決される
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "launch-party-queue",
-      "migrations_dir": "migrations"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "launch-party-queue",
+	"compatibility_date": "2025-04-04",
+	"main": "./workers/app.ts",
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "launch-party-queue",
+			"migrations_dir": "migrations"
+		}
+	]
 }
