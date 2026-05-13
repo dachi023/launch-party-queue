@@ -1,6 +1,6 @@
 # Launch Party Queue 🎉
 
-リリースの「打ち上げ」をキューイングするツール。1リリース = 1乾杯。
+A tool for queueing release "launch parties". One release = one cheers.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/dachi023/launch-party-queue)
 
@@ -22,18 +22,18 @@ bun run dev
 
 ## Deploy
 
-### A. Deploy to Cloudflare ボタン
+### A. Deploy to Cloudflare button
 
-冒頭のボタンを押す。
+Click the button at the top.
 
-### B. 既存リポジトリを Cloudflare に接続
+### B. Connect an existing repository to Cloudflare
 
 1. Cloudflare Dashboard → Workers & Pages → Create → Import a repository
-2. このリポジトリを選択
+2. Pick this repository
 3. Build command: `bun install && bun run build`
 4. Deploy command: `bunx wrangler deploy && bunx wrangler d1 migrations apply launch-party-queue --remote`
 
-### C. 手元から
+### C. From your machine
 
 ```bash
 bunx wrangler login
@@ -42,16 +42,16 @@ bun run deploy
 
 ## Routes
 
-| Path | 役割 |
+| Path | Purpose |
 |---|---|
-| `/` | 最後に開いた / 最初のチームへリダイレクト |
-| `/teams/new` | チームを作成 |
-| `/t/:slug` | キュー (ホーム) |
-| `/t/:slug/releases/new` | リリースを enqueue |
-| `/t/:slug/releases/:id` | 詳細・予定登録・Cheers・Reopen・Delete |
-| `/t/:slug/history` | 消化済みアーカイブ |
+| `/` | Redirect to the last-opened or first team |
+| `/teams/new` | Create a team |
+| `/t/:slug` | Queue (home) |
+| `/t/:slug/releases/new` | Enqueue a release |
+| `/t/:slug/releases/:id` | Detail, scheduling, Cheers, Reopen, Delete |
+| `/t/:slug/history` | Archive of completed releases |
 
-選択中のチームは `lpq_team` Cookie に保存される。
+The currently selected team is stored in the `lpq_team` cookie.
 
 ## Data model
 
@@ -64,20 +64,20 @@ releases   (id, team_id, name, released_at, note, status,
 
 ## Scripts
 
-| Command | 役割 |
+| Command | Purpose |
 |---|---|
-| `bun run dev` | 開発サーバー |
-| `bun run build` | 本番ビルド |
-| `bun run preview` | ビルド成果物をローカルプレビュー |
-| `bun run deploy` | build + wrangler deploy + リモートマイグレーション |
+| `bun run dev` | Dev server |
+| `bun run build` | Production build |
+| `bun run preview` | Preview the build output locally |
+| `bun run deploy` | build + wrangler deploy + remote migrations |
 | `bun run typecheck` | wrangler types + react-router typegen + tsc -b |
-| `bun run db:migrate:local` | ローカル D1 にマイグレーション適用 |
-| `bun run db:migrate:remote` | リモート D1 にマイグレーション適用 |
+| `bun run db:migrate:local` | Apply migrations to local D1 |
+| `bun run db:migrate:remote` | Apply migrations to remote D1 |
 
 ## Files
 
-- `app/components/SiteScene.client.tsx` — 3Dシーン本体
-- `app/components/{BeerMug,BeerBottle,ChampagneBottle,ChampagneFlute,Cork,Donut,Skewer,Sushi}.tsx` — モデル
-- `app/components/{ConfettiField,BokehLights,RisingBubbles,Streamers}.tsx` — 紙吹雪・泡・リボン
-- `app/app.css` — 配色とユーティリティ
-- `app/lib/party.ts` — Cheers 時の演出 (canvas-confetti + Web Audio + 3D)
+- `app/components/SiteScene.client.tsx` — main 3D scene
+- `app/components/{BeerMug,BeerBottle,ChampagneBottle,ChampagneFlute,Cork,Donut,Skewer,Sushi}.tsx` — models
+- `app/components/{ConfettiField,BokehLights,RisingBubbles,Streamers}.tsx` — confetti, bubbles, ribbons
+- `app/app.css` — palette and utilities
+- `app/lib/party.ts` — Cheers effect (canvas-confetti + Web Audio + 3D)
