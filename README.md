@@ -38,22 +38,32 @@ bun run dev
 ```
 
 `http://localhost:5173` (使用中なら 5174…) で開きます。
-ローカルでは `wrangler.jsonc` の `database_id` はダミーUUIDのまま動作するので、Cloudflare ログインは不要です。
+`wrangler.jsonc` には `database_id` を意図的に書いていません。ローカルでは `database_name` で解決されるので Cloudflare ログインは不要です。
 
-## 本番デプロイ (手動)
+## 本番デプロイ
 
-Deploy ボタンを使わず手動でやる場合:
+### Deploy to Cloudflare ボタン経由 (推奨)
+
+リポジトリ冒頭のボタンを押すと、Cloudflare がフォーク+Worker+D1 を**自動でプロビジョニング**してくれます。
+
+### 既存リポジトリに Cloudflare を繋ぐ場合
+
+`wrangler.jsonc` に **`database_id` を書かない** のがポイントです。`wrangler deploy` 時に Cloudflare が D1 を自動作成し、bind してくれます。
+
+1. Cloudflare Dashboard → Workers & Pages → Create → **Import a repository**
+2. このリポジトリを選択
+3. Build command: `bun install && bun run build`
+4. Deploy command: `bunx wrangler deploy && bunx wrangler d1 migrations apply launch-party-queue --remote`
+5. Save → push する度に自動デプロイ
+
+### 手元から直接デプロイ
 
 ```bash
-# 1. D1 を作成
-bunx wrangler d1 create launch-party-queue
-#    → 出力された database_id を wrangler.jsonc に貼り付け
-
-# 2. ビルド + デプロイ + リモート D1 マイグレーション (一発)
+bunx wrangler login         # 初回のみ
 bun run deploy
 ```
 
-`bun run deploy` は `react-router build` → `wrangler deploy` → `wrangler d1 migrations apply launch-party-queue --remote` を直列で実行します。
+`bun run deploy` は `react-router build` → `wrangler deploy` (D1 を自動作成) → `wrangler d1 migrations apply launch-party-queue --remote` を直列で実行します。`database_id` をリポジトリにコミットする必要はありません。
 
 ## ルーティング
 
